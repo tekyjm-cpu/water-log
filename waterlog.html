@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>水分ログ</title>
+<style>
+  body { font-family: -apple-system, system-ui; margin: 20px; }
+  h1 { text-align: center; }
+  .row { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
+  button { padding: 10px 14px; font-size: 16px; }
+  .total { text-align: center; font-size: 28px; margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<h1>💧 水分ログ</h1>
+
+<div style="text-align:center">
+  <input type="date" id="date">
+</div>
+
+<div class="total"><span id="total">0</span> ml</div>
+
+<div class="row">
+  <button onclick="add(50)">＋50</button>
+  <button onclick="add(100)">＋100</button>
+  <button onclick="add(200)">＋200</button>
+</div>
+
+<div class="row">
+  <button onclick="add(-50)">−50</button>
+  <button onclick="add(-100)">−100</button>
+  <button onclick="add(-200)">−200</button>
+</div>
+
+<script>
+  const dateInput = document.getElementById('date');
+  const totalEl = document.getElementById('total');
+
+  function key(d){ return 'water-' + d; }
+
+  function load(){
+    const k = key(dateInput.value);
+    totalEl.textContent = localStorage.getItem(k) || 0;
+  }
+
+  function add(v){
+    const k = key(dateInput.value);
+    let n = parseInt(localStorage.getItem(k) || 0) + v;
+    if (n < 0) n = 0;
+    localStorage.setItem(k, n);
+    totalEl.textContent = n;
+  }
+
+  // 初期化
+  const today = new Date().toISOString().slice(0,10);
+  dateInput.value = today;
+  dateInput.onchange = load;
+  load();
+</script>
+
+</body>
+</html>
